@@ -89,7 +89,26 @@ const createWindow = () => {
     },
   });
   mainWindow.setMenu(null); // 👈 permanently removes the menu
-  mainWindow.loadURL(VITE_DEV_SERVER_URL);
+  //mainWindow.loadURL(VITE_DEV_SERVER_URL);
+
+ if (!app.isPackaged) {
+    mainWindow.loadURL("http://localhost:8080"); // Vite dev server
+
+  } else {
+    mainWindow.loadFile(path.join(__dirname, "build", "index.html")); // production build
+
+  }
+
+  // 🔥 FIX: Ensure window receives keyboard focus
+  mainWindow.webContents.on('dom-ready', () => {
+    mainWindow.webContents.focus();
+  });
+  
+  // 🔑 Automatically open DevTools
+  //mainWindow.webContents.openDevTools();
+
+  
+
 };
 
 // --- App lifecycle ---
